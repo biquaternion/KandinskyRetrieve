@@ -15,8 +15,8 @@ from venv import logger
 
 from PIL import Image
 
-from src.kandinskyapi import retrieve_keys, KandinskyAPI
-from src.project_const import DATA_PATH
+from src.kandinsky_api import retrieve_keys, KandinskyAPI
+from src.common import DATA_PATH
 
 
 class DatasetMaker:
@@ -82,7 +82,7 @@ class DatasetMaker:
         image.save(retrieved_dir_path / f'{image_class}_{self.idx_generated}.png')
         self.idx_generated += 1
         ts_end = datetime.now()
-        logger.info(f'elapsed time: {ts_end - ts_start}')
+        self.logger.info(f'elapsed time: {ts_end - ts_start}')
         return image
 
     def collect_images(self, image_classes: Dict[str, List[str]], limit=1000):

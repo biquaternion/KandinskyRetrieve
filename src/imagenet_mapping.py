@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import List, Dict
 
-from src.project_const import DATA_PATH
+from src.common import DATA_PATH
 
 
 class ImagenetMapping:

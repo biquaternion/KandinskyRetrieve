@@ -12,7 +12,7 @@ from typing import Dict, Tuple
 import requests
 from PIL import Image
 
-from src.project_const import DATA_PATH
+from src.common import DATA_PATH
 
 
 def retrieve_keys() -> Tuple[str, str]:
