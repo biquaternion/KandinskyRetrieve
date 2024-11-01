@@ -1,0 +1,3 @@
+[submodule "GenImage"]
+	path = GenImage
+	url = git@github.com:GenImage-Dataset/GenImage.git

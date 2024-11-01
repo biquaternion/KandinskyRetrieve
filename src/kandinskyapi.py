@@ -4,6 +4,7 @@
 import base64
 import io
 import json
+import logging
 import os
 import time
 from typing import Dict, Tuple
@@ -29,6 +30,7 @@ class KandinskyAPI:
             'X-Key': f'Key {self.api_key}',
             'X-Secret': f'Secret {self.secret_key}'
         }
+        self.logger = logging.getLogger('KandinskyAPI')
 
     def get_model(self):
         model_path = 'key/api/v1/models'
@@ -62,12 +64,13 @@ class KandinskyAPI:
                                     headers=self.auth_headers)
             data = response.json()
             if data['status'] == 'DONE':
-                return data['images']
+                return data
             else:
-                print(data['status'])
+                self.logger.info(f'request status: {data['status']}')
 
             attempts -= 1
             time.sleep(delay)
+        return data
 
 
 if __name__ == '__main__':
@@ -81,8 +84,10 @@ if __name__ == '__main__':
                                    f'in nature or '
                                    f'in city or '
                                    f'in interior or '
-                                   f'in hands or ' 
+                                   f'in aquarium or '
+                                   f'in the zoo or '
                                    f'in the sky or '
+                                   f'in the wild or '
                                    f'on the table',
                             model=model, images=1,
                             width=320, height=320)
@@ -90,6 +95,7 @@ if __name__ == '__main__':
     result = r.check_generation(request_id=request_id,
                                 attempts=200,
                                 delay=10)
+    result = result['images']
     print(result)
     image = Image.open(io.BytesIO(base64.b64decode(result[0])))
     retrieved_dir_path = DATA_PATH / 'retrieved'
