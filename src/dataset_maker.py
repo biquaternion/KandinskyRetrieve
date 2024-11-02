@@ -49,7 +49,6 @@ class DatasetMaker:
                  f'in nature or ' \
                  f'in city or ' \
                  f'in interior or ' \
-                 f'in aquarium or ' \
                  f'in the zoo or ' \
                  f'in the sky or ' \
                  f'in the wild or ' \
@@ -107,4 +106,4 @@ if __name__ == '__main__':
     # ds_maker.make_image('goldfish')
     with open(DATA_PATH / 'imagenet_1000.json') as f:
         image_classes = json.load(f)
-        ds_maker.collect_images(image_classes, limit=100)
+        ds_maker.collect_images(image_classes, limit=1000)
