@@ -1,3 +1,6 @@
 [submodule "GenImage"]
 	path = GenImage
 	url = git@github.com:GenImage-Dataset/GenImage.git
+[submodule "AIGCDetectBenchmark"]
+	path = AIGCDetectBenchmark
+	url = git@github.com:Ekko-zn/AIGCDetectBenchmark.git
