@@ -37,7 +37,7 @@ class DatasetMaker:
     def make_image(self,
                    image_class: str = 'balloon',
                    width: int = 320, height: int = 320,
-                   attempts: int = 200, delay: int = 40):
+                   attempts: int = 200, delay: int = 10):
         ts_start = datetime.now()
         api_key, secret_key = retrieve_keys()
         k_api = KandinskyAPI(url='https://api-key.fusionbrain.ai/',
