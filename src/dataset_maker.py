@@ -104,6 +104,6 @@ if __name__ == '__main__':
     # todo: add arguments
     ds_maker = DatasetMaker(short_prompt=False)
     # ds_maker.make_image('goldfish')
-    with open(DATA_PATH / 'imagenet_1000.json') as f:
+    with open(DATA_PATH / 'classes_generated.json') as f:
         image_classes = json.load(f)
         ds_maker.collect_images(image_classes, limit=1000)

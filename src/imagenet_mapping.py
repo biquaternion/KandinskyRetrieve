@@ -9,7 +9,7 @@ from src.common import DATA_PATH
 
 class ImagenetMapping:
     def __init__(self):
-        self.classes_path = DATA_PATH / 'imagenet_1000_classes.txt'
+        self.classes_path = DATA_PATH / 'classes_generated_original.txt'
         self.classes = []
         self.get_classes()
 
@@ -19,7 +19,7 @@ class ImagenetMapping:
                 self.classes.append(line.strip().split(', '))
         return self.classes
 
-    def save_as_json(self, output_path: Path = DATA_PATH / 'imagenet_1000.json') -> Dict[str, List[str]]:
+    def save_as_json(self, output_path: Path = DATA_PATH / 'classes_generated.json') -> Dict[str, List[str]]:
         result = {str(i + 1): class_names for i, class_names in enumerate(self.classes)}
         with open(output_path, 'w') as f:
             f.write(json.dumps(result, indent=4))
