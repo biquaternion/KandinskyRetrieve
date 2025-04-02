@@ -11,12 +11,15 @@ from datetime import datetime
 from pathlib import Path
 import random
 from typing import List, Dict
-from venv import logger
+from random import randint
 
 from PIL import Image
 
 from src.kandinsky_api import retrieve_keys, KandinskyAPI
 from src.common import DATA_PATH
+
+logging.basicConfig(format='%(asctime)s [$(name)s] %(levelname)s %(message)s', level=logging.INFO)
+logger = logging.getLogger('dataset_maker')
 
 
 class DatasetMaker:
@@ -84,6 +87,12 @@ class DatasetMaker:
         self.logger.info(f'elapsed time: {ts_end - ts_start}')
         return image
 
+    def propose_height_width(self, lo: int = 320, hi: int = 1080):
+        ph = randint(lo, hi)
+        pw = randint(int(ph * 0.8), int(ph * 1.2))
+        pw = max(320, pw)
+        return ph, pw
+
     def collect_images(self, image_classes: Dict[str, List[str]], limit=1000):
         ts_start = datetime.now()
         logger.info('starting images collection')
@@ -91,7 +100,8 @@ class DatasetMaker:
         random.shuffle(image_classes_keys)
         for k in image_classes_keys:
             c = image_classes[k]
-            self.make_image(c[0])
+            height, width = self.propose_height_width()
+            self.make_image(c[0], width=width, height=height)
             if self.idx_generated >= limit:
                 break
         ts_end = datetime.now()
