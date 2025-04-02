@@ -46,6 +46,7 @@ class DatasetMaker:
         k_api = KandinskyAPI(url='https://api-key.fusionbrain.ai/',
                              api_key=api_key,
                              secret_key=secret_key)
+        image_class = 'goldfish'
         prompt = f'photo of {image_class}'
         if not self.short_prompt:
             prompt += f' ' \
@@ -112,8 +113,10 @@ class DatasetMaker:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # todo: add arguments
+    args = parser.parse_args()
+    class_list_name = args.get('class_list_name', 'imagenet_1000')
     ds_maker = DatasetMaker(short_prompt=False)
     # ds_maker.make_image('goldfish')
-    with open(DATA_PATH / 'classes_generated.json') as f:
+    with open(DATA_PATH / f'{class_list_name}.json') as f:
         image_classes = json.load(f)
         ds_maker.collect_images(image_classes, limit=1000)
