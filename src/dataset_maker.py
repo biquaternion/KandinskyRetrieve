@@ -113,8 +113,11 @@ class DatasetMaker:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # todo: add arguments
+    parser.add_argument('--class-list-name',
+                        default='imagenet_1000',
+                        help='class list name (without extension)')
     args = parser.parse_args()
-    class_list_name = args.get('class_list_name', 'imagenet_1000')
+    class_list_name = args.class_list_name
     ds_maker = DatasetMaker(short_prompt=False)
     # ds_maker.make_image('goldfish')
     with open(DATA_PATH / f'{class_list_name}.json') as f:
