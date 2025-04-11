@@ -122,6 +122,7 @@ if __name__ == '__main__':
     # ds_maker.make_image('goldfish')
     if class_list_name not in ['imagenet_1000']:
         class_name, n = class_list_name.split('_')
+        n = int(n)
         image_classes = {str(i): [class_name] for i in range(n)}
         ds_maker.collect_images(image_classes, limit=n)
     else:
