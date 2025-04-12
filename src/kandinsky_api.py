@@ -32,17 +32,17 @@ class KandinskyAPI:
         }
         self.logger = logging.getLogger('KandinskyAPI')
 
-    def get_model(self):
-        model_path = 'key/api/v1/models'
-        response = requests.get(url=self.url + model_path,
+    def get_pipeline(self):
+        pipeline_path = 'key/api/v1/pipelines'
+        response = requests.get(url=self.url + pipeline_path,
                                 headers=self.auth_headers)
         data = response.json()
         return data[0]['id']
 
-    def generate(self, prompt: str, model: Dict, images=1, width=1024, height=1024):
+    def generate(self, prompt: str, pipeline: Dict, images=1, width=1024, height=1024):
         params = {
             'type': 'GENERATE',
-            'num_images': images,
+            'numImages': images,
             'width': width,
             'height': height,
             'generateParams': {
@@ -50,17 +50,19 @@ class KandinskyAPI:
             }
         }
         data = {
-            'model_id': (None, model),
+            'pipeline_id': (None, pipeline),
             'params': (None, json.dumps(params), 'application/json'),
         }
-        response = requests.post(url=self.url + 'key/api/v1/text2image/run',
+        response = requests.post(url=self.url + 'key/api/v1/pipeline/run',
                                  headers=self.auth_headers, files=data)
         data = response.json()
         return data['uuid']
 
     def check_generation(self, request_id: str, attempts: int = 10, delay: int = 10):
+        assert attempts > 0, 'expected at least one attempt'
+        data = None
         while attempts > 0:
-            response = requests.get(url=self.url + 'key/api/v1/text2image/status/' + request_id,
+            response = requests.get(url=self.url + 'key/api/v1/pipeline/status/' + request_id,
                                     headers=self.auth_headers)
             data = response.json()
             if data['status'] == 'DONE':

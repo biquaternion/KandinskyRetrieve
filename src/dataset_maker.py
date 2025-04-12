@@ -59,7 +59,7 @@ class DatasetMaker:
                  f'on the table'
         self.logger.info(f'sending request for "{image_class}"')
         request_id = k_api.generate(prompt=prompt,
-                                    model=k_api.get_model(),
+                                    pipeline=k_api.get_pipeline(),
                                     images=1,
                                     width=width,
                                     height=height)
@@ -77,7 +77,7 @@ class DatasetMaker:
                                         delay=delay)
         # todo: check status
         self.logger.info(f'result is ready. status: "{result['status']}"."')
-        images = result['images']
+        images = result['result']['files']
         image = Image.open(io.BytesIO(base64.b64decode(images[0])))
         retrieved_dir_path = self.output_dir
         if self.visualize:
@@ -88,7 +88,8 @@ class DatasetMaker:
         self.logger.info(f'elapsed time: {ts_end - ts_start}')
         return image
 
-    def propose_height_width(self, lo: int = 320, hi: int = 1080):
+    @staticmethod
+    def propose_height_width(lo: int = 320, hi: int = 1024):
         ph = randint(lo, hi)
         pw = randint(int(ph * 0.8), int(ph * 1.2))
         pw = max(320, pw)
