@@ -115,8 +115,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     # todo: add arguments
     parser.add_argument('--class-list-name',
-                        default='imagenet_1000',
-                        help='class list name (without extension)')
+                        # default='imagenet_1000',
+                        default='goldfish_1',
+                        help='class list name (without extension) or '
+                             'classname and number of images e.g. goldfish_12')
+    parser.add_argument('--resolution',
+                        default='random',
+                        help='use random or x-separated e.g. 320x320')
     args = parser.parse_args()
     class_list_name = args.class_list_name
     ds_maker = DatasetMaker(short_prompt=False)
