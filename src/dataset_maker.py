@@ -95,14 +95,20 @@ class DatasetMaker:
         pw = max(320, pw)
         return ph, pw
 
-    def collect_images(self, image_classes: Dict[str, List[str]], limit=1000):
+    def collect_images(self,
+                       image_classes: Dict[str, List[str]],
+                       limit=1000,
+                       resolution=None):
         ts_start = datetime.now()
         logger.info('starting images collection')
         image_classes_keys = list(image_classes.keys())
         random.shuffle(image_classes_keys)
         for k in image_classes_keys:
             c = image_classes[k]
-            height, width = self.propose_height_width()
+            if resolution is None:
+                height, width = self.propose_height_width()
+            else:
+                height, width = resolution
             self.make_image(c[0], width=width, height=height)
             if self.idx_generated >= limit:
                 break
@@ -124,13 +130,15 @@ if __name__ == '__main__':
                         help='use random or x-separated e.g. 320x320')
     args = parser.parse_args()
     class_list_name = args.class_list_name
+    resolution = args.resolution
+    width, height = map(int, resolution.split('x'))
     ds_maker = DatasetMaker(short_prompt=False)
     # ds_maker.make_image('goldfish')
     if class_list_name not in ['imagenet_1000']:
         class_name, n = class_list_name.split('_')
         n = int(n)
         image_classes = {str(i): [class_name] for i in range(n)}
-        ds_maker.collect_images(image_classes, limit=n)
+        ds_maker.collect_images(image_classes, limit=n, resolution=(height, width))
     else:
         with open(DATA_PATH / f'{class_list_name}.json') as f:
             image_classes = json.load(f)
