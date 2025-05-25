@@ -49,14 +49,15 @@ class DatasetMaker:
         # image_class = 'goldfish'
         prompt = f'photo of {image_class}'
         if not self.short_prompt:
-            prompt += f' ' \
-                 f'in nature or ' \
-                 f'in city or ' \
-                 f'in interior or ' \
-                 f'in the zoo or ' \
-                 f'in the sky or ' \
-                 f'in the wild or ' \
-                 f'on the table'
+            # prompt += f' ' \
+            #      f'in nature or ' \
+            #      f'in city or ' \
+            #      f'in interior or ' \
+            #      f'in the zoo or ' \
+            #      f'in the sky or ' \
+            #      f'in the wild or ' \
+            #      f'on the table'
+            prompt = f'photo of {image_class} in a suitable setting'
         self.logger.info(f'sending request for "{image_class}"')
         request_id = k_api.generate(prompt=prompt,
                                     pipeline=k_api.get_pipeline(),
@@ -131,14 +132,18 @@ if __name__ == '__main__':
     args = parser.parse_args()
     class_list_name = args.class_list_name
     resolution = args.resolution
-    width, height = map(int, resolution.split('x'))
+    if resolution != 'random':
+        height, width = map(int, resolution.split('x'))
     ds_maker = DatasetMaker(short_prompt=False)
     # ds_maker.make_image('goldfish')
     if class_list_name not in ['imagenet_1000']:
         class_name, n = class_list_name.split('_')
         n = int(n)
         image_classes = {str(i): [class_name] for i in range(n)}
-        ds_maker.collect_images(image_classes, limit=n, resolution=(height, width))
+        if resolution == 'random':
+            ds_maker.collect_images(image_classes=image_classes, limit=n)
+        else:
+            ds_maker.collect_images(image_classes, limit=n, resolution=(height, width))
     else:
         with open(DATA_PATH / f'{class_list_name}.json') as f:
             image_classes = json.load(f)
