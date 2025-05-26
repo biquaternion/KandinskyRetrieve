@@ -57,7 +57,8 @@ class DatasetMaker:
             #      f'in the sky or ' \
             #      f'in the wild or ' \
             #      f'on the table'
-            prompt = f'photo of {image_class} in a suitable setting'
+            # prompt = f'photo of {image_class} in a suitable setting'
+            prompt = f'photo of {image_class}'
         self.logger.info(f'sending request for "{image_class}"')
         request_id = k_api.generate(prompt=prompt,
                                     pipeline=k_api.get_pipeline(),
